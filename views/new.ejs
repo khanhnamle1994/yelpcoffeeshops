@@ -1,0 +1,12 @@
+<% include partials/header %>
+
+<h1>Create a New Coffeeshop</h1>
+
+<form action="/coffeeshops" method="post">
+  <input type="text" name="name" placeholder="name">
+  <input type="text" name="image" placeholder="image url">
+  <button>Submit!</button>
+</form>
+
+<a href="/coffeeshops">Go Back</a>
+<% include partials/footer %>
