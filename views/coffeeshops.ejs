@@ -1,0 +1,8 @@
+<h1>This is the coffeeshops page!</h1>
+
+<% coffeeshops.forEach(function(coffeeshop){ %>
+  <div>
+    <h4><%= coffeeshop.name %></h4>
+    <img src="<%= coffeeshop.image %>">
+  </div>
+<% }); %>
