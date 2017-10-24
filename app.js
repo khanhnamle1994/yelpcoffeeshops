@@ -9,9 +9,9 @@ app.get("/", function(req, res){
 
 app.get("/coffeeshops", function(req, res){
   var coffeeshops = [
-    {name: "Cappucino", image: "https://images.unsplash.com/photo-1504066116688-57c2efd91274?w=2550&ixid=dW5zcGxhc2guY29tOzs7Ozs%3D"},
-    {name: "Starbucks", image: "https://images.unsplash.com/photo-1496379896897-7b57622f431b?w=2689&ixid=dW5zcGxhc2guY29tOzs7Ozs%3D"},
-    {name: "Iced Coffee", image: "https://images.unsplash.com/photo-1471922597728-92f81bfe2445?w=2552&ixid=dW5zcGxhc2guY29tOzs7Ozs%3D"}
+    {name: "Sightglass", image: "https://assets3.thrillist.com/v1/image/2711571/size/tmg-gift_guide_variable.jpg"},
+    {name: "Duboce Park Cafe", image: "https://assets3.thrillist.com/v1/image/2711494/size/tl-horizontal_main.jpg"},
+    {name: "Blue Bottle", image: "https://assets3.thrillist.com/v1/image/2712021/size/tl-horizontal_main.jpg"}
   ]
 
   res.render("coffeeshops", {coffeeshops: coffeeshops});
