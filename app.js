@@ -10,7 +10,8 @@ app.set("view engine", "ejs");
 // Schema Setup
 var coffeeshopSchema = new mongoose.Schema({
   name: String,
-  image: String
+  image: String,
+  description: String
 });
 
 var Coffeeshop = mongoose.model("Coffeeshop", coffeeshopSchema);
@@ -18,7 +19,8 @@ var Coffeeshop = mongoose.model("Coffeeshop", coffeeshopSchema);
 // Coffeeshop.create(
 //   {
 //     name: "Sightglass Coffee",
-//     image: "https://assets3.thrillist.com/v1/image/2711571/size/tmg-gift_guide_variable.jpg"
+//     image: "https://assets3.thrillist.com/v1/image/2711571/size/tmg-gift_guide_variable.jpg",
+//     description: "Best coffee place in SOMA!"
 //   }, function(err, coffeeshop) {
 //     if(err){
 //       console.log(err);
@@ -43,22 +45,25 @@ app.get("/", function(req, res){
   res.render("landing");
 });
 
+// INDEX - show all coffeeshops
 app.get("/coffeeshops", function(req, res){
   // Get all coffeeshops from DB
   Coffeeshop.find({}, function(err, allCoffeeshops){
     if(err){
       console.log(err);
     } else {
-      res.render("coffeeshops", {coffeeshops: allCoffeeshops});
+      res.render("index", {coffeeshops: allCoffeeshops});
     }
   });
 });
 
+// CREATE - add new coffeeshop to DB
 app.post("/coffeeshops", function(req, res){
   // get data from form and add to coffeeshops array
   var name = req.body.name;
   var image = req.body.image;
-  var newCoffeeshop = {name: name, image: image};
+  var desc = req.body.description;
+  var newCoffeeshop = {name: name, image: image, description: desc};
   // Create a new coffeeshop and save to DB
   Coffeeshop.create(newCoffeeshop, function(err, newlyCreated){
     if(err){
@@ -70,8 +75,22 @@ app.post("/coffeeshops", function(req, res){
   });
 });
 
+// NEW - show form to create new coffeeshop
 app.get("/coffeeshops/new", function(req, res){
   res.render("new.ejs");
+});
+
+// SHOW - show more info about one coffeeshop
+app.get("/coffeeshops/:id", function(req, res){
+  // find the coffeeshop with provided ID
+  Coffeeshop.findById(req.params.id, function(err, foundCoffeeshop){
+    if(err){
+      console.log(err);
+    } else {
+      // render show template with that coffeeshop
+      res.render("show", {coffeeshop: foundCoffeeshop});
+    }
+  });
 });
 
 app.listen(process.env.PORT || 3000, process.env.IP, function(){
