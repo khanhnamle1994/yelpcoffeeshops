@@ -2,19 +2,11 @@ var express = require("express");
 var app = express();
 var bodyParser = require("body-parser");
 var mongoose = require("mongoose");
+var Coffeeshop = require("./models/coffeeshop");
 
 mongoose.connect("mongodb://localhost/yelp_coffee_shop");
 app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
-
-// Schema Setup
-var coffeeshopSchema = new mongoose.Schema({
-  name: String,
-  image: String,
-  description: String
-});
-
-var Coffeeshop = mongoose.model("Coffeeshop", coffeeshopSchema);
 
 // Coffeeshop.create(
 //   {
