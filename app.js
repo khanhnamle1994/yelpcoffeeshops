@@ -5,24 +5,10 @@ var mongoose = require("mongoose");
 var Coffeeshop = require("./models/coffeeshop");
 var seedDB = require("./seeds");
 
-seedDB();
 mongoose.connect("mongodb://localhost/yelp_coffee_shop");
 app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
-
-// Coffeeshop.create(
-//   {
-//     name: "Sightglass Coffee",
-//     image: "https://assets3.thrillist.com/v1/image/2711571/size/tmg-gift_guide_variable.jpg",
-//     description: "Best coffee place in SOMA!"
-//   }, function(err, coffeeshop) {
-//     if(err){
-//       console.log(err);
-//     } else {
-//       console.log("Newly created coffeeshop: ");
-//       console.log(coffeeshop);
-//     }
-//   });
+seedDB();
 
 // var coffeeshops = [
 //   {name: "Sightglass Coffee", image: "https://assets3.thrillist.com/v1/image/2711571/size/tmg-gift_guide_variable.jpg"},
@@ -77,7 +63,7 @@ app.get("/coffeeshops/new", function(req, res){
 // SHOW - show more info about one coffeeshop
 app.get("/coffeeshops/:id", function(req, res){
   // find the coffeeshop with provided ID
-  Coffeeshop.findById(req.params.id, function(err, foundCoffeeshop){
+  Coffeeshop.findById(req.params.id).populate("comments").exec(function(err, foundCoffeeshop){
     if(err){
       console.log(err);
     } else {

@@ -29,7 +29,7 @@ function seedDB(){
     console.log("removed coffeeshops!");
     // Add a few coffeeshops
     data.forEach(function(seed){
-      Coffeeshop.create(seed, function(err, data){
+      Coffeeshop.create(seed, function(err, coffeeshop){
         if(err){
           console.log(err);
         } else {
