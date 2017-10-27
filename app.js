@@ -139,6 +139,19 @@ app.post("/register", function(req, res){
   });
 });
 
+// show login form
+app.get("/login", function(req, res){
+  res.render("login");
+});
+
+// handle login logic
+app.post("/login", passport.authenticate("local",
+  {
+    successRedirect: "/coffeeshops",
+    failureRedirect: "/login"
+  }), function(req, res){
+});
+
 app.listen(process.env.PORT || 3000, process.env.IP, function(){
   console.log("The YelpCoffeeShop Server has started");
 });
