@@ -15,16 +15,17 @@ app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
 seedDB();
 
-// var coffeeshops = [
-//   {name: "Sightglass Coffee", image: "https://assets3.thrillist.com/v1/image/2711571/size/tmg-gift_guide_variable.jpg"},
-//   {name: "Duboce Park Cafe", image: "https://assets3.thrillist.com/v1/image/2711494/size/tl-horizontal_main.jpg"},
-//   {name: "Blue Bottle Coffee", image: "https://assets3.thrillist.com/v1/image/2712021/size/tl-horizontal_main.jpg"},
-//   {name: "Reveille Coffee Co", image: "https://assets3.thrillist.com/v1/image/2711847/size/tl-horizontal_main.jpg"},
-//   {name: "Jane on Filmore", image: "https://assets3.thrillist.com/v1/image/2711475/size/tmg-article_tall.jpg"},
-//   {name: "Coffee Bar", image: "https://assets3.thrillist.com/v1/image/1265482/size/tl-horizontal_main.jpg"},
-//   {name: "Orson's Belly", image: "https://assets3.thrillist.com/v1/image/2711845/size/tl-horizontal_main.jpg"},
-//   {name: "Cafe Du Soleil", image: "https://assets3.thrillist.com/v1/image/2711505/size/tmg-article_tall.jpg"}
-// ];
+// Passport Configuration
+app.use(require("express-session")({
+  secret: "!",
+  resave: false,
+  saveUninitilized: false
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 app.get("/", function(req, res){
   res.render("landing");
@@ -112,6 +113,29 @@ app.post("/coffeeshops/:id/comments", function(req, res){
         }
       });
     }
+  });
+});
+
+//============================
+// AUTH ROUTES
+//============================
+
+// show register form
+app.get("/register", function(req, res){
+  res.render("register");
+});
+
+// handle signup logic
+app.post("/register", function(req, res){
+  var newUser = new User({username: req.body.username});
+  User.register(newUser, req.body.password, function(err, user){
+    if(err){
+      console.log(err);
+      return res.render("register");
+    }
+    passport.authenticate("local")(req, res, function(){
+      res.redirect("/coffeeshops");
+    });
   });
 });
 
