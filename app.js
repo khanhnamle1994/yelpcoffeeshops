@@ -82,7 +82,7 @@ app.get("/coffeeshops/:id", function(req, res){
 //============================
 // COMMENT ROUTES
 //============================
-app.get("/coffeeshops/:id/comments/new", function(req, res){
+app.get("/coffeeshops/:id/comments/new", isLoggedIn, function(req, res){
   // find coffeeshop by ID
   Coffeeshop.findById(req.params.id, function(err, coffeeshop){
     if(err){
@@ -93,7 +93,7 @@ app.get("/coffeeshops/:id/comments/new", function(req, res){
   });
 });
 
-app.post("/coffeeshops/:id/comments", function(req, res){
+app.post("/coffeeshops/:id/comments", isLoggedIn, function(req, res){
   // look up coffeeshop using ID
   Coffeeshop.findById(req.params.id, function(err, coffeeshop){
     if(err){
@@ -151,6 +151,19 @@ app.post("/login", passport.authenticate("local",
     failureRedirect: "/login"
   }), function(req, res){
 });
+
+// logic route
+app.get("/logout", function(req, res){
+  req.logout();
+  res.redirect("/coffeeshops");
+});
+
+function isLoggedIn(req, res, next){
+  if(req.isAuthenticated()){
+    return next();
+  }
+  res.redirect("/login");
+};
 
 app.listen(process.env.PORT || 3000, process.env.IP, function(){
   console.log("The YelpCoffeeShop Server has started");
