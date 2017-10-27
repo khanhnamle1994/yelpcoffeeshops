@@ -9,6 +9,11 @@ var Comment = require("./models/comment");
 var User = require("./models/user");
 var seedDB = require("./seeds");
 
+// requiring routes
+var commentRoutes = require("./routes/comments");
+var coffeeshopRoutes = require("./routes/coffeeshops");
+var indexRoutes = require("./routes/index");
+
 mongoose.connect("mongodb://localhost/yelp_coffee_shop");
 app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
@@ -32,143 +37,9 @@ app.use(function(req, res, next){
   next();
 });
 
-app.get("/", function(req, res){
-  res.render("landing");
-});
-
-// INDEX - show all coffeeshops
-app.get("/coffeeshops", function(req, res){
-  // Get all coffeeshops from DB
-  Coffeeshop.find({}, function(err, allCoffeeshops){
-    if(err){
-      console.log(err);
-    } else {
-      res.render("coffeeshops/index", {coffeeshops: allCoffeeshops});
-    }
-  });
-});
-
-// CREATE - add new coffeeshop to DB
-app.post("/coffeeshops", function(req, res){
-  // get data from form and add to coffeeshops array
-  var name = req.body.name;
-  var image = req.body.image;
-  var desc = req.body.description;
-  var newCoffeeshop = {name: name, image: image, description: desc};
-  // Create a new coffeeshop and save to DB
-  Coffeeshop.create(newCoffeeshop, function(err, newlyCreated){
-    if(err){
-      console.log(err);
-    } else {
-      // redirect back to coffeeshops page
-      res.redirect("/coffeeshops");
-    }
-  });
-});
-
-// NEW - show form to create new coffeeshop
-app.get("/coffeeshops/new", function(req, res){
-  res.render("coffeeshops/new");
-});
-
-// SHOW - show more info about one coffeeshop
-app.get("/coffeeshops/:id", function(req, res){
-  // find the coffeeshop with provided ID
-  Coffeeshop.findById(req.params.id).populate("comments").exec(function(err, foundCoffeeshop){
-    if(err){
-      console.log(err);
-    } else {
-      // render show template with that coffeeshop
-      res.render("coffeeshops/show", {coffeeshop: foundCoffeeshop});
-    }
-  });
-});
-
-//============================
-// COMMENT ROUTES
-//============================
-app.get("/coffeeshops/:id/comments/new", isLoggedIn, function(req, res){
-  // find coffeeshop by ID
-  Coffeeshop.findById(req.params.id, function(err, coffeeshop){
-    if(err){
-      console.log(err);
-    } else {
-      res.render("comments/new", {coffeeshop: coffeeshop});
-    }
-  });
-});
-
-app.post("/coffeeshops/:id/comments", isLoggedIn, function(req, res){
-  // look up coffeeshop using ID
-  Coffeeshop.findById(req.params.id, function(err, coffeeshop){
-    if(err){
-      console.log(err);
-      res.redirect("/coffeeshops");
-    } else {
-      // create new comment
-      Comment.create(req.body.comment, function(err, comment){
-        if(err){
-          console.log(err);
-        } else {
-          // connect new comment to coffeeshop
-          coffeeshop.comments.push(comment);
-          coffeeshop.save();
-          // redirect coffeeshop show page
-          res.redirect("/coffeeshops/" + coffeeshop._id);
-        }
-      });
-    }
-  });
-});
-
-//============================
-// AUTH ROUTES
-//============================
-
-// show register form
-app.get("/register", function(req, res){
-  res.render("register");
-});
-
-// handle signup logic
-app.post("/register", function(req, res){
-  var newUser = new User({username: req.body.username});
-  User.register(newUser, req.body.password, function(err, user){
-    if(err){
-      console.log(err);
-      return res.render("register");
-    }
-    passport.authenticate("local")(req, res, function(){
-      res.redirect("/coffeeshops");
-    });
-  });
-});
-
-// show login form
-app.get("/login", function(req, res){
-  res.render("login");
-});
-
-// handle login logic
-app.post("/login", passport.authenticate("local",
-  {
-    successRedirect: "/coffeeshops",
-    failureRedirect: "/login"
-  }), function(req, res){
-});
-
-// logic route
-app.get("/logout", function(req, res){
-  req.logout();
-  res.redirect("/coffeeshops");
-});
-
-function isLoggedIn(req, res, next){
-  if(req.isAuthenticated()){
-    return next();
-  }
-  res.redirect("/login");
-};
+app.use("/coffeeshops/:id/comments", commentRoutes);
+app.use("/coffeeshops", coffeeshopRoutes);
+app.use(indexRoutes);
 
 app.listen(process.env.PORT || 3000, process.env.IP, function(){
   console.log("The YelpCoffeeShop Server has started");
