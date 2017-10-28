@@ -54,6 +54,31 @@ router.get("/:id", function(req, res){
   });
 });
 
+// EDIT
+router.get("/:id/edit", function(req, res){
+  Coffeeshop.findById(req.params.id, function(err, foundCoffeeshop){
+    if(err){
+      res.redirect("/coffeeshops");
+    } else {
+      res.render("coffeeshops/edit", {coffeeshop: foundCoffeeshop});
+    }
+  });
+});
+
+router.put(":/id", function(req, res){
+  // find and update the correct coffeeshop
+  Coffeeshop.findByIdAndUpdate(req.params.id, req.body.coffeeshop, function(err, updatedCoffeeshop){
+    if(err){
+      res.redirect("/coffeeshops");
+    } else {
+      res.redirect("/coffeeshops/" + req.params.id);
+    }
+  });
+  // redirect to show page
+});
+
+// UPDATE
+
 // Middleware
 function isLoggedIn(req, res, next){
   if(req.isAuthenticated()){
