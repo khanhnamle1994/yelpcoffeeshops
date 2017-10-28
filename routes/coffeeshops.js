@@ -74,10 +74,18 @@ router.put(":/id", function(req, res){
       res.redirect("/coffeeshops/" + req.params.id);
     }
   });
-  // redirect to show page
 });
 
-// UPDATE
+// DESTROY
+router.delete(":id", function(req, res){
+  Coffeeshop.findByIdAndRemove(req.params.id, function(err){
+    if(err){
+      res.redirect("/coffeeshops");
+    } else {
+      res.redirect("/coffeeshops");
+    }
+  });
+});
 
 // Middleware
 function isLoggedIn(req, res, next){

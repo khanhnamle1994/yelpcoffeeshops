@@ -19,7 +19,10 @@
           <p>
             <em>Submitted By <%= coffeeshop.author.username %></em>
           </p>
-          <a class="btn btn-warning" href="/coffeeshops/<%= coffeeshop._id %>/edit">Edit</a>
+          <a class="btn btn-xs btn-warning" href="/coffeeshops/<%= coffeeshop._id %>/edit">Edit</a>
+          <form id="delete-form" action="/coffeeshops/<%= coffeeshop._id %>?_method=delete" method="post">
+            <button class="btn btn-xs btn-danger">Delete</button>
+          </form>
         </div>
       </div>
       <div class="well">
