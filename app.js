@@ -41,7 +41,7 @@ app.use(function(req, res, next){
 
 app.use("/coffeeshops/:id/comments", commentRoutes);
 app.use("/coffeeshops", coffeeshopRoutes);
-app.use(indexRoutes);
+app.use("/", indexRoutes);
 
 app.listen(process.env.PORT || 3000, process.env.IP, function(){
   console.log("The YelpCoffeeShop Server has started");
