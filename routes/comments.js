@@ -27,6 +27,7 @@ router.post("/", middleware.isLoggedIn, function(req, res){
       // create new comment
       Comment.create(req.body.comment, function(err, comment){
         if(err){
+          req.flash("error", "Something went wrong");
           console.log(err);
         } else {
           // add username and id to comment
@@ -37,6 +38,7 @@ router.post("/", middleware.isLoggedIn, function(req, res){
           // connect new comment to coffeeshop
           coffeeshop.comments.push(comment);
           coffeeshop.save();
+          req.flash("success", "Successfully added comment");
           // redirect coffeeshop show page
           res.redirect("/coffeeshops/" + coffeeshop._id);
         }
