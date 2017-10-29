@@ -19,13 +19,14 @@ router.get("/", function(req, res){
 router.post("/", middleware.isLoggedIn, function(req, res){
   // get data from form and add to coffeeshops array
   var name = req.body.name;
+  var price = req.body.price;
   var image = req.body.image;
   var desc = req.body.description;
   var author = {
     id: req.user._id,
     username: req.user.username
   }
-  var newCoffeeshop = {name: name, image: image, description: desc, author: author};
+  var newCoffeeshop = {name: name, price: price, image: image, description: desc, author: author};
   // Create a new coffeeshop and save to DB
   Coffeeshop.create(newCoffeeshop, function(err, newlyCreated){
     if(err){

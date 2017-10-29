@@ -9,6 +9,9 @@
           <input class="form-control" type="text" name="coffeeshop[name]" value="<%= coffeeshop.name %>">
         </div>
         <div class="form-group">
+          <input class="form-control" type="number" name="coffeeshop[price]" value="<%= coffeeshop.price %>" min="0.01" step="0.01">
+        </div>
+        <div class="form-group">
           <input class="form-control" type="text" name="coffeeshop[image]" value="<%= coffeeshop.image %>">
         </div>
         <div class="form-group">
