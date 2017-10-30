@@ -16,7 +16,8 @@ var commentRoutes = require("./routes/comments");
 var coffeeshopRoutes = require("./routes/coffeeshops");
 var indexRoutes = require("./routes/index");
 
-mongoose.connect("mongodb://localhost/yelp_coffee_shop");
+// mongoose.connect("mongodb://localhost/yelp_coffee_shop");
+mongoose.connect("mongodb://khanhnamle:2017@ds241025.mlab.com:41025/yelpcoffeeshop");
 app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
