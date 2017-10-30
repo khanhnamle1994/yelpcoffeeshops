@@ -1,6 +1,8 @@
 # YelpCoffeeShops Development Process
 A full-stack Node.js project from my web dev course with RESTful routing
 
+![Home-Page](Home-Page.png)
+
 ## Initial Setup
 * Add Landing Page
 * Add Coffeeshops Page that lists all coffeeshops
